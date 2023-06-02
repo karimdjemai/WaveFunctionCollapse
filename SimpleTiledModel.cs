@@ -251,4 +251,8 @@ class SimpleTiledModel : Model
         }
         return result.ToString();
     }
+    
+    public int[] getEndModelIndices() {
+        return observed;
+    }
 }
