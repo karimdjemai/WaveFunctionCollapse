@@ -9,16 +9,16 @@ class SimpleTiledModel : Model
 {
     List<int[]> tiles;
     List<string> tilenames;
+    List<string> subset = null;
     int tilesize;
     bool blackBackground;
 
     public SimpleTiledModel(string name, string subsetName, int width, int height, bool periodic, bool blackBackground, Heuristic heuristic) : base(width, height, 1, periodic, heuristic)
     {
         this.blackBackground = blackBackground;
-        XElement xroot = XDocument.Load($"tilesets/{name}.xml").Root;
+        XElement xroot = XDocument.Load($"Assets/WaveFunctionCollapse/tilesets/{name}.xml").Root;
         bool unique = xroot.Get("unique", false);
 
-        List<string> subset = null;
         if (subsetName != null)
         {
             XElement xsubset = xroot.Element("subsets").Elements("subset").FirstOrDefault(x => x.Get<string>("name") == subsetName);
@@ -251,8 +251,14 @@ class SimpleTiledModel : Model
         }
         return result.ToString();
     }
-    
-    public int[] getEndModelIndices() {
+
+    public string[] GetTileNames()
+    {
+        return tilenames.ToArray();
+    }
+
+    public int[] GetEndModelIndices()
+    {
         return observed;
     }
 }
