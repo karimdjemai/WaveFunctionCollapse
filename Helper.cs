@@ -45,19 +45,20 @@ static class BitmapHelper
 {
     public static (int[], int, int) LoadBitmap(string filename)
     {
-        using var image = Image.Load<Bgra32>(filename);
-        int width = image.Width, height = image.Height;
+        // using var image = Image.Load<Bgra32>(filename);
+        // int width = image.Width, height = image.Height;
+        int width = 0, height = 0;
         int[] result = new int[width * height];
-        image.CopyPixelDataTo(MemoryMarshal.Cast<int, Bgra32>(result));
+        // image.CopyPixelDataTo(MemoryMarshal.Cast<int, Bgra32>(result));
         return (result, width, height);
     }
 
-    unsafe public static void SaveBitmap(int[] data, int width, int height, string filename)
+    public static void SaveBitmap(int[] data, int width, int height, string filename)
     {
-        fixed (int* pData = data)
-        {
-            using var image = Image.WrapMemory<Bgra32>(pData, width, height);
-            image.SaveAsPng(filename);
-        }
+        // fixed (int* pData = data)
+        // {
+        //     using var image = Image.WrapMemory<Bgra32>(pData, width, height);
+        //     image.SaveAsPng(filename);
+        // }
     }
 }
