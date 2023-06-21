@@ -16,7 +16,7 @@ class SimpleTiledModel : Model
     public SimpleTiledModel(string name, string subsetName, int width, int height, bool periodic, bool blackBackground, Heuristic heuristic) : base(width, height, 1, periodic, heuristic)
     {
         this.blackBackground = blackBackground;
-        XElement xroot = XDocument.Load($"Assets/WaveFunctionCollapse/tilesets/{name}.xml").Root;
+        XElement xroot = XDocument.Load($"Assets/Resources/TileSets/{name}.xml").Root;
         bool unique = xroot.Get("unique", false);
 
         if (subsetName != null)
@@ -107,6 +107,8 @@ class SimpleTiledModel : Model
 
                 for (int s = 0; s < 8; s++) map[t][s] += T;
 
+                
+                // Action: [["tilename 0"][]]
                 action.Add(map[t]);
             }
 
