@@ -154,23 +154,77 @@ class SimpleTiledModel : Model
 
         foreach (XElement xneighbor in xroot.Element("neighbors").Elements("neighbor"))
         {
-            string[] left = xneighbor.Get<string>("left").Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            string[] right = xneighbor.Get<string>("right").Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (xneighbor.Get("inferVertical", true))
+            {
+                string[] left = xneighbor.Get<string>("left").Split(new char[] {' '},
+                    StringSplitOptions.RemoveEmptyEntries);
+                string[] right = xneighbor.Get<string>("right").Split(new char[] {' '},
+                    StringSplitOptions.RemoveEmptyEntries);
 
-            if (subset != null && (!subset.Contains(left[0]) || !subset.Contains(right[0]))) continue;
+                if (subset != null &&
+                    (!subset.Contains(left[0]) || !subset.Contains(right[0]))) continue;
 
-            int L = action[firstOccurrence[left[0]]][left.Length == 1 ? 0 : int.Parse(left[1])], D = action[L][1];
-            int R = action[firstOccurrence[right[0]]][right.Length == 1 ? 0 : int.Parse(right[1])], U = action[R][1];
+                int L = action[firstOccurrence[left[0]]][
+                        left.Length == 1 ? 0 : int.Parse(left[1])],
+                    D = action[L][1];
 
-            densePropagator[0][R][L] = true;
-            densePropagator[0][action[R][6]][action[L][6]] = true;
-            densePropagator[0][action[L][4]][action[R][4]] = true;
-            densePropagator[0][action[L][2]][action[R][2]] = true;
+                int R = action[firstOccurrence[right[0]]][
+                        right.Length == 1 ? 0 : int.Parse(right[1])],
+                    U = action[R][1];
 
-            densePropagator[1][U][D] = true;
-            densePropagator[1][action[D][6]][action[U][6]] = true;
-            densePropagator[1][action[U][4]][action[D][4]] = true;
-            densePropagator[1][action[D][2]][action[U][2]] = true;
+                densePropagator[0][R][L] = true;
+                densePropagator[0][action[R][6]][action[L][6]] = true;
+                densePropagator[0][action[L][4]][action[R][4]] = true;
+                densePropagator[0][action[L][2]][action[R][2]] = true;
+
+                densePropagator[1][U][D] = true;
+                densePropagator[1][action[D][6]][action[U][6]] = true;
+                densePropagator[1][action[U][4]][action[D][4]] = true;
+                densePropagator[1][action[D][2]][action[U][2]] = true;
+            }
+            else
+            {
+
+                string[] left = xneighbor.Get<string>("left","").Split(new char[] {' '},
+                    StringSplitOptions.RemoveEmptyEntries);
+                string[] right = xneighbor.Get<string>("right","").Split(new char[] {' '},
+                    StringSplitOptions.RemoveEmptyEntries);
+                string[] up = xneighbor.Get<string>("up", "").Split(new char[] {' '},
+                    StringSplitOptions.RemoveEmptyEntries);
+                string[] down = xneighbor.Get<string>("down", "").Split(new char[] {' '},
+                    StringSplitOptions.RemoveEmptyEntries);
+
+                if (left.Length > 0 && right.Length > 0)
+                {
+                    int L = action[firstOccurrence[left[0]]][
+                            left.Length == 1 ? 0 : int.Parse(left[1])];
+                    int R = action[firstOccurrence[right[0]]][
+                            right.Length == 1 ? 0 : int.Parse(right[1])];
+                    
+                    densePropagator[0][R][L] = true;
+                    densePropagator[0][action[R][6]][action[L][6]] = true;
+                    densePropagator[0][action[L][4]][action[R][4]] = true;
+                    densePropagator[0][action[L][2]][action[R][2]] = true;
+                }
+
+                else if (up.Length > 0 && down.Length > 0)
+                {
+                    int D = action[firstOccurrence[down[0]]][
+                        down.Length == 1 ? 0 : int.Parse(down[1])];
+                    int U = action[firstOccurrence[up[0]]][
+                        up.Length == 1 ? 0 : int.Parse(up[1])];
+                    
+                    densePropagator[1][U][D] = true;
+                    densePropagator[1][action[D][6]][action[U][6]] = true;
+                    densePropagator[1][action[U][4]][action[D][4]] = true;
+                    densePropagator[1][action[D][2]][action[U][2]] = true;
+                }
+                else
+                {
+                    Console.WriteLine($"ERROR: neighbor {xneighbor.ToString()} can only and must define vertical xor horizontal neighbors.");       
+                    continue;
+                }
+            }
         }
 
         for (int t2 = 0; t2 < T; t2++) for (int t1 = 0; t1 < T; t1++)
