@@ -196,6 +196,9 @@ class SimpleTiledModel : Model
 
                 if (left.Length > 0 && right.Length > 0)
                 {
+                    if (subset != null &&
+                        (!subset.Contains(left[0]) || !subset.Contains(right[0])))  continue;
+                
                     int L = action[firstOccurrence[left[0]]][
                             left.Length == 1 ? 0 : int.Parse(left[1])];
                     int R = action[firstOccurrence[right[0]]][
@@ -209,6 +212,10 @@ class SimpleTiledModel : Model
 
                 else if (up.Length > 0 && down.Length > 0)
                 {
+                    
+                    if (subset != null &&
+                        (!subset.Contains(up[0]) || !subset.Contains(down[0])))  continue;
+                
                     int D = action[firstOccurrence[down[0]]][
                         down.Length == 1 ? 0 : int.Parse(down[1])];
                     int U = action[firstOccurrence[up[0]]][
