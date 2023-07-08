@@ -173,14 +173,24 @@ class SimpleTiledModel : Model
                     U = action[R][1];
 
                 densePropagator[0][R][L] = true;
-                densePropagator[0][action[R][6]][action[L][6]] = true;
-                densePropagator[0][action[L][4]][action[R][4]] = true;
                 densePropagator[0][action[L][2]][action[R][2]] = true;
+                // densePropagator[0][action[R][6]][action[L][6]] = true;
+                // densePropagator[0][action[L][4]][action[R][4]] = true;
+                // ###here###
+                if (xneighbor.Get("inferReflection",true)) {
+                    densePropagator[2][L][R] = true;
+                    densePropagator[2][action[R][2]][action[L][2]] = true;
+                }
 
                 densePropagator[1][U][D] = true;
-                densePropagator[1][action[D][6]][action[U][6]] = true;
-                densePropagator[1][action[U][4]][action[D][4]] = true;
                 densePropagator[1][action[D][2]][action[U][2]] = true;
+                // densePropagator[1][action[D][6]][action[U][6]] = true;
+                // densePropagator[1][action[U][4]][action[D][4]] = true;
+                // ###here###
+                if (xneighbor.Get("inferReflection",true)) {
+                    densePropagator[3][D][U] = true;
+                    densePropagator[3][action[U][2]][action[D][2]] = true;
+                }
             }
             else
             {
@@ -205,9 +215,14 @@ class SimpleTiledModel : Model
                             right.Length == 1 ? 0 : int.Parse(right[1])];
                     
                     densePropagator[0][R][L] = true;
-                    densePropagator[0][action[R][6]][action[L][6]] = true;
-                    densePropagator[0][action[L][4]][action[R][4]] = true;
                     densePropagator[0][action[L][2]][action[R][2]] = true;
+                    // densePropagator[0][action[R][6]][action[L][6]] = true;
+                    // densePropagator[0][action[L][4]][action[R][4]] = true;
+                    // ###here###
+                    if (xneighbor.Get("inferReflection",true)) {
+                        densePropagator[2][L][R] = true;
+                        densePropagator[2][action[R][2]][action[L][2]] = true;
+                    }
                 }
 
                 else if (up.Length > 0 && down.Length > 0)
@@ -222,9 +237,14 @@ class SimpleTiledModel : Model
                         up.Length == 1 ? 0 : int.Parse(up[1])];
                     
                     densePropagator[1][U][D] = true;
-                    densePropagator[1][action[D][6]][action[U][6]] = true;
-                    densePropagator[1][action[U][4]][action[D][4]] = true;
                     densePropagator[1][action[D][2]][action[U][2]] = true;
+                    // densePropagator[1][action[D][6]][action[U][6]] = true;
+                    // densePropagator[1][action[U][4]][action[D][4]] = true;
+                    // ###here###
+                    if (xneighbor.Get("inferReflection",true)) {
+                        densePropagator[3][D][U] = true;
+                        densePropagator[3][action[U][2]][action[D][2]] = true;
+                    }
                 }
                 else
                 {
@@ -234,11 +254,11 @@ class SimpleTiledModel : Model
             }
         }
 
-        for (int t2 = 0; t2 < T; t2++) for (int t1 = 0; t1 < T; t1++)
-            {
-                densePropagator[2][t2][t1] = densePropagator[0][t1][t2];
-                densePropagator[3][t2][t1] = densePropagator[1][t1][t2];
-            }
+        // for (int t2 = 0; t2 < T; t2++) for (int t1 = 0; t1 < T; t1++)
+        //     {
+        //         densePropagator[2][t2][t1] = densePropagator[0][t1][t2];
+        //         densePropagator[3][t2][t1] = densePropagator[1][t1][t2];
+        //     }
 
         List<int>[][] sparsePropagator = new List<int>[4][];
         for (int d = 0; d < 4; d++)
