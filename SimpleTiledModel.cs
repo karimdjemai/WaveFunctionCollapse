@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Xml.Linq;
 using System.Collections.Generic;
+using UnityEngine;
 
 class SimpleTiledModel : Model
 {
@@ -16,7 +17,9 @@ class SimpleTiledModel : Model
     public SimpleTiledModel(string name, string subsetName, int width, int height, bool periodic, bool blackBackground, Heuristic heuristic) : base(width, height, 1, periodic, heuristic)
     {
         this.blackBackground = blackBackground;
-        XElement xroot = XDocument.Load($"Assets/Resources/TileSets/{name}.xml").Root;
+        var xml = Resources.Load<TextAsset>($"TileSets/{name}");
+        XDocument xmlDoc = XDocument.Parse(xml.text);
+        XElement xroot = xmlDoc.Root;
         bool unique = xroot.Get("unique", false);
 
         if (subsetName != null)
